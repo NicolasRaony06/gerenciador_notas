@@ -59,27 +59,6 @@ bool putInFile(string fileName, string data) {
   return false;
 }
 
-// functionality: Registers a new subject by prompting the user for its name and
-// code. return: True if registration is successful, false otherwise.
-bool registerSubject() {
-  string fileName = "disciplinas.txt";
-  string subjectName;
-  cout << "Enter subject name: ";
-  cin >> subjectName;
-  if (subjectName != "") {
-    int subjectCode;
-    cout << "Enter subject code: ";
-    cin >> subjectCode;
-    if (subjectCode <= 0) {
-      cout << "Invalid subject code!" << endl;
-      return false;
-    }
-    string data = subjectName + ";" + to_string(subjectCode);
-    return putInFile(fileName, data);
-  }
-  return false;
-}
-
 // functionality: Counts the number of lines in a file.
 // return: The number of lines in the file.
 int getLineNumber(string fileName) {
@@ -93,6 +72,25 @@ int getLineNumber(string fileName) {
     file.close();
   }
   return lineNumber;
+}
+
+// functionality: Registers a new subject by prompting the user for its name and
+// code. return: True if registration is successful, false otherwise.
+bool registerSubject() {
+  string fileName = "disciplinas.txt";
+  string subjectName;
+  cout << "Enter subject name: ";
+  cin >> subjectName;
+  if (subjectName != "") {
+    int subjectCode = getLineNumber(fileName) + 1;
+    if (subjectCode <= 0) {
+      cout << "Invalid subject code!" << endl;
+      return false;
+    }
+    string data = subjectName + ";" + to_string(subjectCode);
+    return putInFile(fileName, data);
+  }
+  return false;
 }
 
 // functionality: Registers a new student, automatically generating a code.
@@ -217,7 +215,7 @@ bool assignSubjectToClass() {
     cout << "Invalid subject code or name!" << endl;
     return false;
   }
-  if (search("subjects.txt", subjectQuery) == -1) {
+  if (search("turmas.txt", subjectQuery) == -1) {
     cout << "Invalid subject code!" << endl;
     return false;
   }
@@ -230,7 +228,7 @@ bool assignSubjectToClass() {
 // functionality: Adds or updates a student's grade for a specific subject and
 // period. return: True if the update is successful, false otherwise.
 bool updateStudentGrade() {
-  string fileName = "grades.txt";
+  string fileName = "notas.txt";
   string studentQuery;
   cout << "Enter student code or name: ";
   cin >> studentQuery;
@@ -238,7 +236,7 @@ bool updateStudentGrade() {
     cout << "Invalid student code or name!" << endl;
     return false;
   }
-  if (search("students.txt", studentQuery) == -1) {
+  if (search("alunos.txt", studentQuery) == -1) {
     cout << "Invalid student code!" << endl;
     return false;
   }
@@ -249,7 +247,7 @@ bool updateStudentGrade() {
     cout << "Invalid subject code or name!" << endl;
     return false;
   }
-  if (search("subjects.txt", subjectQuery) == -1) {
+  if (search("disciplinas.txt", subjectQuery) == -1) {
     cout << "Invalid subject code!" << endl;
     return false;
   }
@@ -324,39 +322,78 @@ float calculateStudentSubjectAverage(const string &studentName,
   return -1;
 }
 
+
+/**
+ * @brief Converte uma string para inteiro.
+ * @param s A string a ser convertida.
+ * @return O valor inteiro, ou -1 se a string não for um número válido.
+ */
+int stringToInt(const std::string& s) {
+    int result = 0;
+    for (char c : s) {
+        if (c >= '0' && c <= '9') {
+            result = result * 10 + (c - '0');
+        } else {
+            return -1;
+        }
+    }
+    return result;
+}
+
 // functionality: Calculates the overall average grade for a student across all
 // subjects. return: The calculated average as a float, or -1 if no grades are
 // found.
-float calculateStudentOverallAverage(const string &studentName) {
-  string lines[MAX_LINES];
-  int numLines = getAllLines("grades.txt", lines);
+float calculateStudentOverallAverage(const string& studentId) {
+    string lines[MAX_LINES];
+    int numLines = getAllLines("notas.txt", lines);
 
-  float sum = 0;
-  int total = 0;
+    float sum = 0.0f;
+    int totalGrades = 0;
 
-  for (int i = 0; i < numLines; i++) {
-    if (lines[i].find(studentName + ";") != 0)
-      continue;
+    for (int i = 0; i < numLines; ++i) {
+        string line = lines[i];
 
-    string line = lines[i];
-    size_t pos = line.find_last_of(";");
-    string grades = line.substr(pos + 1);
+        if (line.find(studentId + ";") != 0) {
+            continue;
+        }
 
-    size_t start = 0, end;
-    while ((end = grades.find(":", start)) != string::npos) {
-      start = grades.find(":", end) + 1;
-      int grade =
-          stoi(grades.substr(end + 1, grades.find(";", end + 1) - end - 1));
-      sum += grade;
-      total++;
-      if (grades.find(";", end) == string::npos)
-        break;
-      end = grades.find(";", end);
-      start = end + 1;
+        size_t firstSemicolon = line.find(';');
+        if (firstSemicolon == std::string::npos) continue;
+
+        size_t secondSemicolon = line.find(';', firstSemicolon + 1);
+        if (secondSemicolon == std::string::npos) {
+
+            secondSemicolon = line.length() - 1;
+        }
+
+        string gradeString = line.substr(secondSemicolon + 1);
+
+        size_t startPos = 0;
+        while (startPos < gradeString.length()) {
+            size_t colonPos = gradeString.find(':', startPos);
+            if (colonPos == std::string::npos) break;
+
+            size_t endPos = gradeString.find(';', colonPos + 1);
+            if (endPos == std::string::npos) {
+                endPos = gradeString.length();
+            }
+
+            string gradeSub = gradeString.substr(colonPos + 1, endPos - colonPos - 1);
+
+            int grade = stringToInt(gradeSub);
+
+
+            if (grade != -1) {
+                sum += grade;
+                totalGrades++;
+            }
+
+            startPos = endPos + 1;
+        }
     }
-  }
 
-  return (total > 0) ? sum / total : -1;
+
+    return (totalGrades > 0) ? sum / totalGrades : -1.0f;
 }
 
 // functionality: Displays all grades and the overall average for a given
@@ -391,7 +428,7 @@ void viewSubjectGrades() {
   cin >> subjectName;
 
   string lines[MAX_LINES];
-  int numLines = getAllLines("grades.txt", lines);
+  int numLines = getAllLines("notas.txt", lines);
 
   cout << "Grades in subject " << subjectName << ":\n";
   for (int i = 0; i < numLines; i++) {
@@ -411,15 +448,20 @@ void generateReport() {
   }
 
   string lines[MAX_LINES];
-  int numLines = getAllLines("notas.txt", lines);
+  string data[MAX_LINES][MAX_COLUMNS];
+  int colSizes[MAX_LINES];
 
+  
+  int numLines = getAllLines("notas.txt", lines);
+  mapFunction(lines, numLines, data, colSizes);
   outFile << "Grades Report\n------------------\n";
   for (int i = 0; i < numLines; i++) {
-    outFile << lines[i] << endl;
+      float averrage = calculateStudentOverallAverage(data[i][0]);
+      outFile << lines[i] << "; media: " << averrage << endl;
   }
 
   outFile.close();
-  cout << "Report saved to report.txt\n";
+  cout << "Report saved to relatorio.txt\n";
 }
 
 // functionality: Main application loop that displays a menu and calls other
