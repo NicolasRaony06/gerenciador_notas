@@ -437,7 +437,7 @@ void viewSubjectGrades() {
   }
 }
 
-// Funcionalidade: Loop principal da aplicação que exibe um menu e chama outras funções com base na entrada do usuário.
+// Funcionalidade: Cria um arquivo de texto chamado 'relatorio.txt' com todas as notas registradas.
 // Retorno: void
 void generateReport() {
   ofstream outFile("relatorio.txt");
