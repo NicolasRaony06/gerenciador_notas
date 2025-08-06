@@ -215,7 +215,7 @@ bool assignSubjectToClass() {
     cout << "Invalid subject code or name!" << endl;
     return false;
   }
-  if (search("turmas.txt", subjectQuery) == -1) {
+  if (search("disciplinas.txt", subjectQuery) == -1) {
     cout << "Invalid subject code!" << endl;
     return false;
   }
@@ -450,7 +450,7 @@ void generateReport() {
   string data[MAX_LINES][MAX_COLUMNS];
   int colSizes[MAX_LINES];
 
-  
+
   int numLines = getAllLines("notas.txt", lines);
   mapFunction(lines, numLines, data, colSizes);
   outFile << "Grades Report\n------------------\n";
