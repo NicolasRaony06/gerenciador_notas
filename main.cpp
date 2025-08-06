@@ -427,16 +427,16 @@ void generateReport() {
 void menu() {
   for (;;) {
     cout << "\n--- MENU ---\n";
-    cout << "1 - Register subject\n";
-    cout << "2 - Register student\n";
-    cout << "3 - Register class\n";
-    cout << "4 - Assign subject to class\n";
-    cout << "5 - Update student grade\n";
-    cout << "6 - View student grades\n";
-    cout << "7 - View subject grades\n";
-    cout << "8 - Generate report\n";
-    cout << "0 - Exit\n";
-    cout << "Enter option: ";
+    cout << "1 - Cadastrar disciplina\n";
+    cout << "2 - Cadastrar aluno\n";
+    cout << "3 - Cadastrar turma\n";
+    cout << "4 - Atribuir disciplina à turma\n";
+    cout << "5 - Atualizar nota do aluno\n";
+    cout << "6 - Visualizar notas do aluno\n";
+    cout << "7 - Visualizar notas da disciplina\n";
+    cout << "8 - Gerar relatório\n";
+    cout << "0 - Sair\n";
+    cout << "Digite a opção: ";
 
     int option;
     cin >> option;
