@@ -453,7 +453,7 @@ void generateReport() {
 
   int numLines = getAllLines("notas.txt", lines);
   mapFunction(lines, numLines, data, colSizes);
-  outFile << "Grades Report\n------------------\n";
+  outFile << "Relatorio de notas\n------------------\n";
   for (int i = 0; i < numLines; i++) {
       float averrage = calculateStudentOverallAverage(data[i][0]);
       outFile << lines[i] << "; media: " << averrage << endl;
