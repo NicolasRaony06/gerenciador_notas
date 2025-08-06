@@ -7,8 +7,8 @@ using namespace std;
 const int MAX_LINES = 1000;
 const int MAX_COLUMNS = 20;
 
-// functionality: Splits lines from a string array into a 2D array based on a
-// delimiter. return: void
+// Funcionalidade: Divide linhas de um array de strings em um array 2D com base em um delimitador.
+// Retorno: void
 void mapFunction(string lines[], int numLines,
                  string mapped[MAX_LINES][MAX_COLUMNS],
                  int colSizes[MAX_LINES]) {
@@ -30,8 +30,8 @@ void mapFunction(string lines[], int numLines,
   }
 }
 
-// functionality: Reads all lines from a file into a C-style string array.
-// return: The number of lines read, or 0 if the file can't be opened.
+// Funcionalidade: Lê todas as linhas de um arquivo para um array de strings no estilo C.
+// Retorno: O número de linhas lidas ou 0 caso o arquivo não possa ser aberto.
 int getAllLines(string fileName, string lines[MAX_LINES]) {
   ifstream file(fileName);
   if (!file.is_open()) {
@@ -47,8 +47,8 @@ int getAllLines(string fileName, string lines[MAX_LINES]) {
   return i;
 }
 
-// functionality: Appends a string of data to the end of a file.
-// return: True if the data was successfully written, false otherwise.
+// Funcionalidade: Adiciona uma string de dados ao final de um arquivo.
+// Retorno: True se os dados foram escritos com sucesso, false caso contrário.
 bool putInFile(string fileName, string data) {
   ofstream file(fileName, ios::app);
   if (file.is_open()) {
@@ -59,8 +59,8 @@ bool putInFile(string fileName, string data) {
   return false;
 }
 
-// functionality: Counts the number of lines in a file.
-// return: The number of lines in the file.
+// Funcionalidade: Conta o número de linhas em um arquivo.
+// Retorno: O número de linhas no arquivo.
 int getLineNumber(string fileName) {
   ifstream file(fileName);
   int lineNumber = 0;
@@ -74,8 +74,8 @@ int getLineNumber(string fileName) {
   return lineNumber;
 }
 
-// functionality: Registers a new subject by prompting the user for its name and
-// code. return: True if registration is successful, false otherwise.
+// Funcionalidade: Cadastra uma nova disciplina solicitando ao usuário o nome e gerando o código automaticamente.
+// Retorno: True se o cadastro for bem-sucedido, false caso contrário.
 bool registerSubject() {
   string fileName = "disciplinas.txt";
   string subjectName;
@@ -93,8 +93,8 @@ bool registerSubject() {
   return false;
 }
 
-// functionality: Registers a new student, automatically generating a code.
-// return: True if registration is successful, false otherwise.
+// Funcionalidade: Cadastra um novo aluno, gerando automaticamente um código.
+// Retorno: True se o cadastro for bem-sucedido, false caso contrário.
 bool registerStudent() {
   string fileName = "alunos.txt";
   string studentName;
@@ -115,8 +115,8 @@ bool registerStudent() {
   return false;
 }
 
-// functionality: Registers a new class with a name and auto-generated code.
-// return: True if registration is successful, false otherwise.
+// Funcionalidade: Cadastra uma nova turma com um nome e um código gerado automaticamente.
+// Retorno: True se o cadastro for bem-sucedido, false caso contrário.
 bool registerClass() {
   string fileName = "turmas.txt";
   string className;
@@ -131,8 +131,8 @@ bool registerClass() {
   return putInFile(fileName, data);
 }
 
-// functionality: Searches for a query string in the first two columns of a
-// given file. return: The index of the found line, or -1 if not found.
+// Funcionalidade: Busca uma string de consulta nas duas primeiras colunas de um arquivo fornecido.
+// Retorno: O índice da linha encontrada, ou -1 se não encontrada.
 int search(string fileName, string query) {
   string lines[MAX_LINES];
   int numLines = getAllLines(fileName, lines);
@@ -151,8 +151,8 @@ int search(string fileName, string query) {
   return -1;
 }
 
-// functionality: Searches for a specific student and subject in the grades
-// file. return: The index of the found grade line, or -1 if not found.
+// Funcionalidade: Procura um aluno e disciplina específicos no arquivo de notas.
+// Retorno: O índice da linha de nota encontrada, ou -1 se não encontrada.
 int searchGrade(string fileName, string query) {
   string lines[MAX_LINES];
   int numLines = getAllLines(fileName, lines);
@@ -175,8 +175,8 @@ int searchGrade(string fileName, string query) {
   return -1;
 }
 
-// functionality: Overwrites a file with the content of a C-style string array.
-// return: void
+// Funcionalidade: Sobrescreve um arquivo com o conteúdo de um array de strings no estilo C.
+// Retorno: void
 void updateData(string fileName, string lines[MAX_LINES], int numLines) {
   ofstream file(fileName);
   if (file.is_open()) {
@@ -187,8 +187,8 @@ void updateData(string fileName, string lines[MAX_LINES], int numLines) {
   }
 }
 
-// functionality: Appends a subject's code to an existing class's data line in
-// the file. return: True if the assignment is successful, false otherwise.
+// Funcionalidade: Adiciona o código de uma disciplina à linha de dados de uma turma existente no arquivo.
+// Retorno: True se a atribuição for bem-sucedida, false caso contrário.
 bool assignSubjectToClass() {
   string fileName = "turmas.txt";
   string classQuery;
@@ -225,8 +225,8 @@ bool assignSubjectToClass() {
   return true;
 }
 
-// functionality: Adds or updates a student's grade for a specific subject and
-// period. return: True if the update is successful, false otherwise.
+// Funcionalidade: Adiciona ou atualiza a nota de um aluno para uma disciplina e período específicos.
+// Retorno: True se a atualização for bem-sucedida, false caso contrário.
 bool updateStudentGrade() {
   string fileName = "notas.txt";
   string studentQuery;
@@ -340,9 +340,8 @@ int stringToInt(const std::string& s) {
     return result;
 }
 
-// functionality: Calculates the overall average grade for a student across all
-// subjects. return: The calculated average as a float, or -1 if no grades are
-// found.
+// Funcionalidade: Calcula a média geral de um aluno em todas as disciplinas.
+// Retorno: A média calculada como float, ou -1 se nenhuma nota for encontrada.
 float calculateStudentOverallAverage(const string& studentId) {
     string lines[MAX_LINES];
     int numLines = getAllLines("notas.txt", lines);
@@ -396,8 +395,8 @@ float calculateStudentOverallAverage(const string& studentId) {
     return (totalGrades > 0) ? sum / totalGrades : -1.0f;
 }
 
-// functionality: Displays all grades and the overall average for a given
-// student from the file. return: void
+// Funcionalidade: Exibe todas as notas e a média geral de um aluno fornecido a partir do arquivo.
+// Retorno: void
 void viewStudentGrades() {
   string studentName;
   cout << "Enter student code or name: ";
@@ -420,8 +419,8 @@ void viewStudentGrades() {
     cout << "No grades registered.\n";
 }
 
-// functionality: Displays all grades for a specific subject across all
-// students. return: void
+// Funcionalidade: Exibe todas as notas de uma disciplina específica entre todos os alunos.
+// Retorno: void
 void viewSubjectGrades() {
   string subjectName;
   cout << "Enter subject code or name: ";
@@ -438,8 +437,8 @@ void viewSubjectGrades() {
   }
 }
 
-// functionality: Creates a text file named 'report.txt' with all recorded
-// grades. return: void
+// Funcionalidade: Loop principal da aplicação que exibe um menu e chama outras funções com base na entrada do usuário.
+// Retorno: void
 void generateReport() {
   ofstream outFile("relatorio.txt");
   if (!outFile.is_open()) {
@@ -464,8 +463,8 @@ void generateReport() {
   cout << "Report saved to relatorio.txt\n";
 }
 
-// functionality: Main application loop that displays a menu and calls other
-// functions based on user input. return: void
+// Funcionalidade: Loop principal da aplicação que exibe um menu e chama outras funções com base na entrada do usuário.
+// Retorno: void
 void menu() {
   for (;;) {
     cout << "\n--- MENU ---\n";
@@ -517,8 +516,8 @@ void menu() {
   }
 }
 
-// functionality: The program's entry point. Calls the main menu function.
-// return: 0 upon successful execution.
+// Funcionalidade: Ponto de entrada do programa. Chama a função do menu principal.
+// Retorno: 0 ao final da execução bem-sucedida.
 int main() {
   menu();
   return 0;
